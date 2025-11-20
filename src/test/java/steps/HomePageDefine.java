@@ -1,5 +1,6 @@
 package steps;
 
+import com.github.javafaker.Faker;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
@@ -12,16 +13,17 @@ public class HomePageDefine {
 
     WebDriver driver = new ChromeDriver();
 
+    Faker faker = new Faker();
 
-    @Given("I am on the Demo Web Shop")
-    public void i_am_on_the_demo_web_shop() throws InterruptedException{
+    @Given("I am on the Home Page")
+    public void i_am_on_the_Home_Page() throws InterruptedException{
         driver.manage().window().maximize();
         driver.get("https://demowebshop.tricentis.com/");
         Thread.sleep(5000);
     }
 
-    @When("I click on the {string} link")
-    public void i_click_on_the_link(String linkText) {
+    @When("I click on the {string}")
+    public void i_click_on_the(String linkText) {
         driver.findElement(By.xpath("//a[text()='" + linkText + "']")).click();
     }
     @When("I enter the registration details")
@@ -29,7 +31,8 @@ public class HomePageDefine {
         driver.findElement(By.id("gender-male")).click();
         driver.findElement(By.xpath("//input[@id=\"FirstName\"]")).sendKeys("Parmod");
         driver.findElement(By.xpath("//input[@id=\"LastName\"]")).sendKeys("Dhiman");
-        driver.findElement(By.xpath("//input[@id=\"Email\"]")).sendKeys("pakkam@123gmail.com");
+        String email = faker.internet().emailAddress();
+        driver.findElement(By.xpath("//input[@id=\"Email\"]")).sendKeys(email);
         driver.findElement(By.xpath("//input[@id=\"Password\"]")).sendKeys("Dhiman12345");
         driver.findElement(By.xpath("//input[@id=\"ConfirmPassword\"]")).sendKeys("Dhiman12345");
     }
@@ -44,5 +47,6 @@ public class HomePageDefine {
         Assert.assertEquals(expected, actual);
 
         driver.quit();
+
     }
 }
